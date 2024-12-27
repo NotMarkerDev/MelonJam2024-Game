@@ -6,12 +6,16 @@ public class Magnet : MonoBehaviour
 {
     private Rigidbody rb;
     private RaycastHit hit;
+    private RaycastHit attractHit;
 
     [SerializeField] private bool isPositive = true;
     [SerializeField] private Transform positiveSign;
     [SerializeField] private Transform negativeSign;
+
+    [Header("Repel & Attract")]
     [SerializeField] private float maxDistance = 5f;
     [SerializeField] private float attractionForce = 50f;
+    [SerializeField] private float repelForce = 5f;
     [SerializeField] private float maxVelocity = 5f;
 
     [Header("References")]
@@ -21,6 +25,7 @@ public class Magnet : MonoBehaviour
     [SerializeField] private Transform grabPoint;
 
     private bool canAttract;
+    private bool canRepel;
     private bool isHoldingObject;
 
     private void Start()
@@ -37,8 +42,25 @@ public class Magnet : MonoBehaviour
             DisplaySign();
         }
 
+        // If mouse button is pressed and raycast hits an object
+        if (Input.GetMouseButton(0))
+        {
+            if (canAttract && !isHoldingObject)
+            {
+                AttractObject();
+            }
+        }
+
+        if (Input.GetMouseButtonDown(0) && !isHoldingObject)
+        {
+            if (canRepel)
+            {
+                RepelObject();
+            }
+        }
+
         // Release object if holding
-        if (isHoldingObject && Input.GetMouseButtonUp(0) || !canAttract)
+        if (isHoldingObject && Input.GetMouseButtonUp(0) || Input.GetKeyDown(KeyCode.E))
         {
             ReleaseObject();
         }
@@ -49,17 +71,21 @@ public class Magnet : MonoBehaviour
         // Perform raycast to check for attractable objects
         if (isPositive)
         {
-            canAttract = Physics.Raycast(cam.position, cam.forward, out hit, maxDistance, negMask);
+            canAttract = Physics.Raycast(cam.position, cam.forward, out attractHit, maxDistance, negMask);
         }
         else
         {
-            canAttract = Physics.Raycast(cam.position, cam.forward, out hit, maxDistance, posMask);
+            canAttract = Physics.Raycast(cam.position, cam.forward, out attractHit, maxDistance, posMask);
         }
 
-        // If mouse button is pressed and raycast hits an object
-        if (Input.GetMouseButton(0) && canAttract && !isHoldingObject)
+        // Raycast for repelling objects
+        if (isPositive)
         {
-            AttractObject();
+            canRepel = Physics.Raycast(cam.position, cam.forward, out hit, maxDistance, posMask);
+        }
+        else
+        {
+            canRepel = Physics.Raycast(cam.position, cam.forward, out hit, maxDistance, negMask);
         }
 
         // If holding an object, smoothly move it to the grab point
@@ -72,7 +98,7 @@ public class Magnet : MonoBehaviour
     private void AttractObject()
     {
         Debug.Log("Attracted object!");
-        rb = hit.transform.gameObject.GetComponent<Rigidbody>();
+        rb = attractHit.transform.gameObject.GetComponent<Rigidbody>();
 
         if (rb != null)
         {
@@ -80,6 +106,26 @@ public class Magnet : MonoBehaviour
             rb.useGravity = false;
             rb.isKinematic = false;
             isHoldingObject = true;
+        }
+        else
+        {
+            Debug.LogWarning("No rigidbody found");
+        }
+    }
+
+    private void RepelObject()
+    {
+        Debug.Log("Repelled");
+        rb = hit.transform.gameObject.GetComponent<Rigidbody>();
+
+        if (rb != null)
+        {
+            Vector3 repelDirection = (hit.transform.position - cam.position).normalized;
+            rb.AddForce(repelDirection * repelForce * 5f, ForceMode.Impulse);
+        }
+        else
+        {
+            Debug.LogWarning("No rigidbody found");
         }
     }
 
