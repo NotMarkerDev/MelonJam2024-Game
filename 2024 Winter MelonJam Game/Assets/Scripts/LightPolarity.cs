@@ -24,7 +24,7 @@ public class LightPolarity : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(1) && polarity >= 2 && !torch.hasLit && lightBlockInRange && bondMaintain != null && bondMaintain.isBonded)
+        if (Input.GetMouseButtonDown(1) && polarity > 2 && !torch.hasLit && lightBlockInRange && bondMaintain != null && bondMaintain.isBonded)
         {
             StartCoroutine(torch.LitTorch());
         }
