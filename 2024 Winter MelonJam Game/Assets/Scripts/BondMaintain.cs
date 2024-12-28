@@ -31,12 +31,15 @@ public class BondMaintain : MonoBehaviour
             bondRequested = true;
         }
 
-        if (Vector3.Distance(pointOne.transform.position, pointTwo.transform.position) <= radius && bondRequested)
+        if (Vector3.Distance(pointOne.transform.position, pointTwo.transform.position) <= radius)
         {
-            lineRenderer.SetPosition(0, pointOne.transform.position);
-            lineRenderer.SetPosition(1, pointTwo.transform.position);
+            if (bondRequested)
+            {
+                lineRenderer.SetPosition(0, pointOne.transform.position);
+                lineRenderer.SetPosition(1, pointTwo.transform.position);
 
-            isBonded = true;
+                isBonded = true;
+            }
         }
         else
         {

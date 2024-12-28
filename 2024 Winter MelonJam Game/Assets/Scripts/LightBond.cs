@@ -6,6 +6,7 @@ public class LightBond : MonoBehaviour
 {
     private LineRenderer lineRenderer;
     [SerializeField] private GameObject lineRendPrefab;
+    [SerializeField] private GameObject text;
 
     [SerializeField] private float radius;
 
@@ -18,6 +19,8 @@ public class LightBond : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        text.SetActive(false);
+
         lights = GameObject.FindGameObjectsWithTag("Positive");
 
         if (lights.Length > 1)
@@ -62,5 +65,15 @@ public class LightBond : MonoBehaviour
         {
             polarity.SetBondMaintain(bondMaintain);
         }
+    }
+
+    public void DisplayText()
+    {
+        text.SetActive(true);
+    }
+
+    public void HideText()
+    {
+        text.SetActive(false);
     }
 }
