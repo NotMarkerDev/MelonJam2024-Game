@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class LightPolarity : MonoBehaviour
 {
+    [SerializeField] GameObject text;
+
     [SerializeField] LayerMask lightBlocks;
     [SerializeField] LayerMask player;
     [SerializeField] float radius = 5f;
@@ -18,15 +20,30 @@ public class LightPolarity : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        text.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(1) && polarity > 2 && !torch.hasLit && lightBlockInRange && bondMaintain != null && bondMaintain.isBonded)
+        if (polarity > 2 && !torch.hasLit && lightBlockInRange && bondMaintain != null && bondMaintain.isBonded)
         {
-            StartCoroutine(torch.LitTorch());
+            text.SetActive(true);
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                StartCoroutine(torch.LitTorch());
+            }
+        }
+
+        else
+        {
+            text.SetActive(false);
+        }
+
+        if (bondMaintain == null)
+        {
+            Debug.Log("obj is null");
         }
     }
 

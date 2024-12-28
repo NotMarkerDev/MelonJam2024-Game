@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Camera : MonoBehaviour
+public class Cam : MonoBehaviour
 {
     [SerializeField] private Transform cam;
     [SerializeField] private Transform orientation;
