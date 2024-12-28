@@ -7,27 +7,21 @@ public class ObjectMagnet : MonoBehaviour
     private Rigidbody rb;
 
     [SerializeField] private float radius;
-    [SerializeField] LayerMask positive;
-    [SerializeField] LayerMask negative;
+    [SerializeField] LayerMask canSuck;
 
     [Header("Attraction")]
     [SerializeField] float attractForceMagnitude = 10f;
-
-    [Header("Repulsion")]
-    [SerializeField] float repelForceMagnitude = 10f;
+    [SerializeField] float nearDrag = 12f;
+    [SerializeField] float farDrag = 1.0f;
 
     private bool canAttract;
-    private bool isPositive;
-
+    
     private RaycastHit attractHit;
-    private RaycastHit repelHit;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-
-        isPositive = gameObject.layer == LayerMask.NameToLayer("Positive");
     }
 
     // Update is called once per frame
@@ -39,8 +33,7 @@ public class ObjectMagnet : MonoBehaviour
     private void FixedUpdate()
     {
         // attraction
-        LayerMask attractionLayer = isPositive ? negative : positive;
-        Collider[] attractionColliders = Physics.OverlapSphere(transform.position, radius, attractionLayer);
+        Collider[] attractionColliders = Physics.OverlapSphere(transform.position, radius, canSuck);
 
         if (attractionColliders.Length > 0)
         {
@@ -53,38 +46,26 @@ public class ObjectMagnet : MonoBehaviour
                 }
             }
         }
-
-        // repulsion
-        LayerMask repulsionLayer = isPositive ? positive : negative;
-        Collider[] repulsionColliders = Physics.OverlapSphere(transform.position, radius, repulsionLayer);
-
-        if (repulsionColliders.Length > 0)
-        {
-            foreach (Collider collider in repulsionColliders)
-            {
-                Rigidbody targetRb = collider.GetComponent<Rigidbody>();
-                if (targetRb != null)
-                {
-                    RepelObject(targetRb);
-                }
-            }
-        }
     }
 
     private void AttractObject(Rigidbody targetRb)
     {
-        Vector3 direction = (transform.position - targetRb.position).normalized;
-        targetRb.AddForce(direction * attractForceMagnitude * 10, ForceMode.Force);
+        Vector3 direction = transform.position - targetRb.position;
+        float distance = direction.magnitude;
+
+        if (distance < 1.5f) 
+        {
+            targetRb.linearDamping = nearDrag;
+        }
+        else
+        {
+            targetRb.linearDamping = farDrag;
+
+
+            targetRb.AddForce(direction.normalized * attractForceMagnitude * 10, ForceMode.Force);
+        }
 
         Debug.Log($"Attracted {targetRb.name}!");
-    }
-
-    private void RepelObject(Rigidbody targetRb)
-    {
-        Vector3 direction = (targetRb.position - transform.position).normalized;
-        targetRb.AddForce(direction * repelForceMagnitude * 10, ForceMode.Force);
-
-        Debug.Log($"Repelled {targetRb.name}!");
     }
 
     private void OnDrawGizmosSelected()
