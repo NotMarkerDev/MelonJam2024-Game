@@ -11,7 +11,7 @@ public class LightBond : MonoBehaviour
 
     [SerializeField] private Transform playerPos;
 
-    private int currentState = 0;
+    [SerializeField] LightPolarity[] lightPolarity;
 
     private GameObject[] lights;
 
@@ -55,5 +55,12 @@ public class LightBond : MonoBehaviour
         lineRenderer.gameObject.GetComponent<BondMaintain>().playerPos = playerPos;
         //lineRenderer.SetPosition(0, transform.position);
         //lineRenderer.SetPosition(1, collider.GetComponent<Transform>().position);
+
+        BondMaintain bondMaintain = lineRenderer.GetComponent<BondMaintain>();
+
+        foreach (var polarity in lightPolarity)
+        {
+            polarity.SetBondMaintain(bondMaintain);
+        }
     }
 }

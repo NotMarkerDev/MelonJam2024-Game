@@ -11,6 +11,8 @@ public class BondMaintain : MonoBehaviour
 
     private bool bondRequested = false;
 
+    public bool isBonded;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -29,15 +31,19 @@ public class BondMaintain : MonoBehaviour
             bondRequested = true;
         }
 
-        if(Vector3.Distance(pointOne.transform.position, pointTwo.transform.position) <= radius && bondRequested)
+        if (Vector3.Distance(pointOne.transform.position, pointTwo.transform.position) <= radius && bondRequested)
         {
             lineRenderer.SetPosition(0, pointOne.transform.position);
             lineRenderer.SetPosition(1, pointTwo.transform.position);
+
+            isBonded = true;
         }
         else
         {
             lineRenderer.SetPosition(0, Vector3.down * 100);
             lineRenderer.SetPosition(1, Vector3.down * 100);
+
+            isBonded = false;
         }
     }
 }
