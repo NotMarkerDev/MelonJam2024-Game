@@ -44,7 +44,7 @@ public class Magnet : MonoBehaviour
         }
 
         // If mouse button is pressed and raycast hits an object
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButtonDown(0))
         {
             if (canAttract && !isHoldingObject)
             {
@@ -74,6 +74,7 @@ public class Magnet : MonoBehaviour
 
     private void FixedUpdate()
     {
+
         // Perform raycast to check for attractable objects
         if (isPositive)
         {
@@ -174,7 +175,7 @@ public class Magnet : MonoBehaviour
         if (rb != null)
         {
             // throw magnet
-            Vector3 throwDirection = (attractHit.transform.position - cam.position).normalized;
+            Vector3 throwDirection = cam.transform.forward.normalized;
             rb.AddForce(throwDirection * throwForce * 10f, ForceMode.Impulse);
 
             // re enable gravity

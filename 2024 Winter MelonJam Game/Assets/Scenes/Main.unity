@@ -2348,6 +2348,7 @@ MonoBehaviour:
   attractionForce: 100
   repelForce: 10
   maxVelocity: 50
+  throwForce: 6
   posMask:
     serializedVersion: 2
     m_Bits: 128
