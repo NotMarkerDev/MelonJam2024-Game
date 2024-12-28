@@ -17,6 +17,7 @@ public class Magnet : MonoBehaviour
     [SerializeField] private float attractionForce = 50f;
     [SerializeField] private float repelForce = 5f;
     [SerializeField] private float maxVelocity = 5f;
+    [SerializeField] private float throwForce = 6f;
 
     [Header("References")]
     [SerializeField] private LayerMask posMask;
@@ -60,9 +61,14 @@ public class Magnet : MonoBehaviour
         }
 
         // Release object if holding
-        if (isHoldingObject && Input.GetMouseButtonUp(0) || Input.GetKeyDown(KeyCode.E))
+        if (isHoldingObject && Input.GetMouseButtonUp(0))
         {
             ReleaseObject();
+        }
+
+        if (isHoldingObject && Input.GetKeyDown(KeyCode.E))
+        {
+            ThrowMagnet();
         }
     }
 
@@ -150,7 +156,6 @@ public class Magnet : MonoBehaviour
         rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, direction * maxVelocity, Time.deltaTime * 5f);
     }
 
-
     private void ReleaseObject()
     {
         Debug.Log("Released object!");
@@ -159,6 +164,24 @@ public class Magnet : MonoBehaviour
             // re enable gravity
             rb.useGravity = true;
             rb = null;
+        }
+
+        isHoldingObject = false;
+    }
+
+    private void ThrowMagnet()
+    {
+        if (rb != null)
+        {
+            // throw magnet
+            Vector3 throwDirection = (attractHit.transform.position - cam.position).normalized;
+            rb.AddForce(throwDirection * throwForce * 10f, ForceMode.Impulse);
+
+            // re enable gravity
+            rb.useGravity = true;
+            rb = null;
+
+            Debug.Log("Object thrown");
         }
 
         isHoldingObject = false;
