@@ -7,8 +7,8 @@ public class Cam : MonoBehaviour
     [SerializeField] private Transform head;
 
     [Header("Sensitivity")]
-    [SerializeField] private float xSens;
-    [SerializeField] private float ySens;
+    public float xSens;
+    public float ySens;
     [SerializeField] private float camSmoothing;
 
     private float xRotation = 0f;
