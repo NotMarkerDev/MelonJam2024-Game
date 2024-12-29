@@ -55,7 +55,7 @@ public class FireLightBeams : MonoBehaviour
         if (!bulletFired)
         {
             bulletFired = true;
-            newText.text = "Move the light block onto the pressure plate to open the door.";
+            newText.text = "The green object on the floor is a pressure plate. Try to use it to open the door.";
         }
     }
 
