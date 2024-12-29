@@ -29,13 +29,13 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
-        SceneManager.LoadScene("Main");
+        SceneManager.LoadScene("Game");
     }
 
     public void StartGame()
     {
         isGameActive = true;
-        SceneManager.LoadScene("Main");
+        SceneManager.LoadScene("Game");
         StartCoroutine(AssignCamera());
     }
 
@@ -120,6 +120,8 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.SetFloat("MouseXSens", mouseXSens.value);
         PlayerPrefs.SetFloat("MouseYSens", mouseYSens.value);
         PlayerPrefs.Save();
+
+        AudioListener.volume = sound.value;
     }
 
     private void LoadSettings()
@@ -127,6 +129,7 @@ public class GameManager : MonoBehaviour
         if (PlayerPrefs.HasKey("Sound"))
         {
             sound.value = PlayerPrefs.GetFloat("Sound");
+            AudioListener.volume = sound.value;
         }
         if (PlayerPrefs.HasKey("MouseXSens"))
         {
