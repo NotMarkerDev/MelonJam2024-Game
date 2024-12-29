@@ -12,6 +12,9 @@ public class BondMaintain : MonoBehaviour
     private bool bondRequested = false;
     private LightBond lightBond;
 
+    private AudioSource source;
+    [SerializeField] private AudioClip clip;
+
     public bool isBonded;
 
     private void Awake()
@@ -23,6 +26,8 @@ public class BondMaintain : MonoBehaviour
     void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();
+
+        source = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -42,6 +47,8 @@ public class BondMaintain : MonoBehaviour
             if (Input.GetKeyDown("q"))
             {
                 bondRequested = true;
+
+                source.PlayOneShot(clip);
             }
         }
 
