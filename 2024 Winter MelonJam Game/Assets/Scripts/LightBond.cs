@@ -22,15 +22,17 @@ public class LightBond : MonoBehaviour
 
         if (lights.Length > 1)
         {
+            int a = 0;
             foreach (GameObject go in lights)
             {
-                foreach (GameObject go2 in lights)
+                for (int i = a; i < lights.Length; i++)
                 {
-                    if (go != go2)
+                    if (go != lights[i])
                     {
-                        DrawBond(go, go2);
+                        DrawBond(go, lights[i]);
                     }
                 }
+                a++;
             }
         }
     }
