@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float speed = 5f;
     [SerializeField] private float jumpForce = 6f;
     [SerializeField] Transform orientation;
+    [SerializeField] private AudioSource source;
 
     [Header("Drag")]
     [SerializeField] private float groundDrag;
@@ -22,11 +23,15 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] LayerMask groundMask;
     public bool isGrounded;
 
+    private bool isMoving;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = this.GetComponent<Rigidbody>();
+
+        source.Stop();
     }
 
     // Update is called once per frame
@@ -44,6 +49,19 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             Jump();
+        }
+
+        // sound
+        bool currentlyMoving = isGrounded && (yMovement != 0 || xMovement != 0);
+        if (currentlyMoving && !isMoving)
+        {
+            source.Play();
+            isMoving = true;
+        }
+        else if (!currentlyMoving && isMoving)
+        {
+            source.Stop();
+            isMoving = false;
         }
     }
 

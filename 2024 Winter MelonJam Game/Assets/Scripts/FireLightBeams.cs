@@ -9,8 +9,11 @@ public class FireLightBeams : MonoBehaviour
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform firePoint;
 
-    [Header("UI References")]
+    [Header("References")]
     [SerializeField] private TMP_Text ammoText;
+    [SerializeField] private AudioClip clip;
+
+    private AudioSource source;
 
     private int currentAmmo;
 
@@ -36,10 +39,17 @@ public class FireLightBeams : MonoBehaviour
         GameObject bulletInstance = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         Rigidbody bulletRb = bulletInstance.GetComponent<Rigidbody>();
 
+        source = bulletInstance.GetComponent<AudioSource>();
+
         if (bulletRb != null)
         {
             bulletRb.linearVelocity = firePoint.forward * bulletSpeed;
         }
+
+        if (source != null)
+        {
+            source.PlayOneShot(clip);
+        }    
     }
 
     public void IncreaseAmmo(int amount)

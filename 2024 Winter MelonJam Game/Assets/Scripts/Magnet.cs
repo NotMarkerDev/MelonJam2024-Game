@@ -24,6 +24,8 @@ public class Magnet : MonoBehaviour
     [SerializeField] private LayerMask negMask;
     [SerializeField] private Transform cam;
     [SerializeField] private Transform grabPoint;
+    [SerializeField] private AudioSource source;
+    [SerializeField] private AudioClip clip;
 
     private bool canAttract;
     private bool canRepel;
@@ -41,6 +43,8 @@ public class Magnet : MonoBehaviour
         {
             isPositive = !isPositive;
             DisplaySign();
+
+            source.PlayOneShot(clip);
         }
 
         // If mouse button is pressed and raycast hits an object
