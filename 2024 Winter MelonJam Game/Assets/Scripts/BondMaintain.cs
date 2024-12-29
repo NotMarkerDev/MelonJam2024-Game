@@ -66,6 +66,8 @@ public class BondMaintain : MonoBehaviour
             lineRenderer.SetPosition(1, pointTwo.transform.position);
 
             isBonded = true;
+
+            lightBond.CheckBondedBlocks();
         }
         else
         {

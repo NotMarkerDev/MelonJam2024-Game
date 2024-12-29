@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class LightBond : MonoBehaviour
@@ -5,6 +6,7 @@ public class LightBond : MonoBehaviour
     private LineRenderer lineRenderer;
     [SerializeField] private GameObject lineRendPrefab;
     [SerializeField] private GameObject text;
+    [SerializeField] private GameObject textPrefab;
 
     [SerializeField] private float radius;
 
@@ -13,6 +15,7 @@ public class LightBond : MonoBehaviour
     [SerializeField] LightPolarity[] lightPolarity;
 
     private GameObject[] lights;
+    private int bondedCount = 0;
 
     void Start()
     {
@@ -61,5 +64,15 @@ public class LightBond : MonoBehaviour
     public void HideText()
     {
         text.SetActive(false);
+    }
+
+    public void CheckBondedBlocks()
+    {
+        bondedCount++;
+
+        if (bondedCount == 3)
+        {
+            textPrefab.GetComponent<TextMeshPro>().text = "When 3 light blocks are bonded, you can right click on the blocks to light the torch.";
+        }
     }
 }

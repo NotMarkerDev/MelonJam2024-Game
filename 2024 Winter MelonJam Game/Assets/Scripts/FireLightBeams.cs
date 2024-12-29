@@ -12,10 +12,11 @@ public class FireLightBeams : MonoBehaviour
     [Header("References")]
     [SerializeField] private TMP_Text ammoText;
     [SerializeField] private AudioClip clip;
+    [SerializeField] private TMP_Text newText;
 
     private AudioSource source;
-
     private int currentAmmo;
+    private bool bulletFired = false;
 
     void Start()
     {
@@ -49,7 +50,13 @@ public class FireLightBeams : MonoBehaviour
         if (source != null)
         {
             source.PlayOneShot(clip);
-        }    
+        }
+
+        if (!bulletFired)
+        {
+            bulletFired = true;
+            newText.text = "Move the light block onto the pressure plate to open the door.";
+        }
     }
 
     public void IncreaseAmmo(int amount)

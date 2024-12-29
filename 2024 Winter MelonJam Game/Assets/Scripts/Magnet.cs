@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Magnet : MonoBehaviour
 {
@@ -26,28 +27,27 @@ public class Magnet : MonoBehaviour
     [SerializeField] private Transform grabPoint;
     [SerializeField] private AudioSource source;
     [SerializeField] private AudioClip clip;
+    [SerializeField] private TextMeshPro tutorialText;
 
     private bool canAttract;
     private bool canRepel;
     private bool isHoldingObject;
+    private bool hasPickedUpPositiveBlock = false;
 
     private void Start()
     {
-        DisplaySign();
+        tutorialText.text = "These are light blocks. Press E to switch between selecting light blocks and selecting dark blocks. When you see a sun icon appear, press LMB to pick up the light blocks.";
     }
 
-    void Update()
+    private void Update()
     {
-        // Switch between positive and negative
         if (Input.GetKeyDown(KeyCode.E))
         {
             isPositive = !isPositive;
             DisplaySign();
-
             source.PlayOneShot(clip);
         }
 
-        // If mouse button is pressed and raycast hits an object
         if (Input.GetMouseButtonDown(0))
         {
             if (canAttract && !isHoldingObject)
@@ -64,7 +64,6 @@ public class Magnet : MonoBehaviour
             }
         }
 
-        // Release object if holding
         if (isHoldingObject && Input.GetMouseButtonUp(0))
         {
             ReleaseObject();
@@ -78,8 +77,6 @@ public class Magnet : MonoBehaviour
 
     private void FixedUpdate()
     {
-
-        // Perform raycast to check for attractable objects
         if (isPositive)
         {
             canAttract = Physics.Raycast(cam.position, cam.forward, out attractHit, maxDistance, negMask);
@@ -89,7 +86,6 @@ public class Magnet : MonoBehaviour
             canAttract = Physics.Raycast(cam.position, cam.forward, out attractHit, maxDistance, posMask);
         }
 
-        // Raycast for repelling objects
         if (isPositive)
         {
             canRepel = Physics.Raycast(cam.position, cam.forward, out hit, maxDistance, posMask);
@@ -99,7 +95,6 @@ public class Magnet : MonoBehaviour
             canRepel = Physics.Raycast(cam.position, cam.forward, out hit, maxDistance, negMask);
         }
 
-        // If holding an object, smoothly move it to the grab point
         if (isHoldingObject && rb != null)
         {
             MoveObjectToGrabPoint();
@@ -108,35 +103,30 @@ public class Magnet : MonoBehaviour
 
     private void AttractObject()
     {
-        Debug.Log("Attracted object!");
         rb = attractHit.transform.gameObject.GetComponent<Rigidbody>();
 
         if (rb != null)
         {
-            // disable gravity and set holding state
             rb.useGravity = false;
             rb.isKinematic = false;
             isHoldingObject = true;
-        }
-        else
-        {
-            Debug.LogWarning("No rigidbody found");
+
+            if (!isPositive && !hasPickedUpPositiveBlock)
+            {
+                hasPickedUpPositiveBlock = true;
+                tutorialText.text = "Pressing Q on a light block when other light blocks are in range will bond them, increasing polarity(energy).";
+            }
         }
     }
 
     private void RepelObject()
     {
-        Debug.Log("Repelled");
         rb = hit.transform.gameObject.GetComponent<Rigidbody>();
 
         if (rb != null)
         {
             Vector3 repelDirection = (hit.transform.position - cam.position).normalized;
             rb.AddForce(repelDirection * repelForce * 5f, ForceMode.Impulse);
-        }
-        else
-        {
-            Debug.LogWarning("No rigidbody found");
         }
     }
 
@@ -153,20 +143,15 @@ public class Magnet : MonoBehaviour
         }
 
         direction.Normalize();
-
-        // Apply smoother force
         float forceMagnitude = Mathf.Lerp(0, attractionForce, 1 - (distance / maxDistance));
         rb.AddForce(direction * forceMagnitude, ForceMode.Force);
-
         rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, direction * maxVelocity, Time.deltaTime * 5f);
     }
 
     private void ReleaseObject()
     {
-        Debug.Log("Released object!");
         if (rb != null)
         {
-            // re enable gravity
             rb.useGravity = true;
             rb = null;
         }
@@ -178,15 +163,10 @@ public class Magnet : MonoBehaviour
     {
         if (rb != null)
         {
-            // throw magnet
             Vector3 throwDirection = cam.transform.forward.normalized;
             rb.AddForce(throwDirection * throwForce * 10f, ForceMode.Impulse);
-
-            // re enable gravity
             rb.useGravity = true;
             rb = null;
-
-            Debug.Log("Object thrown");
         }
 
         isHoldingObject = false;
@@ -194,7 +174,6 @@ public class Magnet : MonoBehaviour
 
     private void DisplaySign()
     {
-        // displays the sign in the ui
         positiveSign.gameObject.SetActive(isPositive);
         negativeSign.gameObject.SetActive(!isPositive);
     }

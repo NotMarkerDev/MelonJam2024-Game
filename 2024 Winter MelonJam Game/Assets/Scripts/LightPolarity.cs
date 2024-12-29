@@ -1,8 +1,10 @@
+using TMPro;
 using UnityEngine;
 
 public class LightPolarity : MonoBehaviour
 {
     [SerializeField] GameObject text;
+    [SerializeField] GameObject tutorial;
 
     [SerializeField] LayerMask lightBlocks;
     [SerializeField] LayerMask player;
@@ -21,6 +23,8 @@ public class LightPolarity : MonoBehaviour
     private BondMaintain bondMaintain;
     private bool lightBlockInRange;
     private float lastRechargeTime;
+
+    private bool torchLit = false;
 
     void Start()
     {
@@ -45,6 +49,13 @@ public class LightPolarity : MonoBehaviour
                 if (Input.GetMouseButtonDown(1))
                 {
                     StartCoroutine(torch.LitTorch());
+
+                    if (!torchLit)
+                    {
+                        tutorial.GetComponent<TextMeshPro>().text = "You can also press F to fire a harmless light beam, which can bounce off mirrors.";
+                        torchLit = true;
+                    }
+
                 }
             }
         }
