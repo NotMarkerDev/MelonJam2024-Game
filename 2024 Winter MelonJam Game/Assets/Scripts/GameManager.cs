@@ -121,7 +121,7 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.SetFloat("MouseYSens", mouseYSens.value);
         PlayerPrefs.Save();
 
-        AudioListener.volume = sound.value;
+        AudioListener.volume = sound.value / 5;
     }
 
     private void LoadSettings()
@@ -129,7 +129,7 @@ public class GameManager : MonoBehaviour
         if (PlayerPrefs.HasKey("Sound"))
         {
             sound.value = PlayerPrefs.GetFloat("Sound");
-            AudioListener.volume = sound.value;
+            AudioListener.volume = sound.value / 5;
         }
         if (PlayerPrefs.HasKey("MouseXSens"))
         {
