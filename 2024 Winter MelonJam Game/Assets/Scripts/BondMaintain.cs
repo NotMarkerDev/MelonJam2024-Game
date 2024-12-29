@@ -10,8 +10,14 @@ public class BondMaintain : MonoBehaviour
     public Transform playerPos;
 
     private bool bondRequested = false;
+    private LightBond lightBond;
 
     public bool isBonded;
+
+    private void Awake()
+    {
+        lightBond = GameObject.Find("Bond Manager").GetComponent<LightBond>();
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -26,20 +32,33 @@ public class BondMaintain : MonoBehaviour
         {
             bondRequested = false;
         }
-        else if (Input.GetKeyDown("q") && (Vector3.Distance(playerPos.position, pointOne.transform.position) < 3 || Vector3.Distance(playerPos.position, pointTwo.transform.position) < 3)) 
+        else if ((Vector3.Distance(playerPos.position, pointOne.transform.position) < 3 || Vector3.Distance(playerPos.position, pointTwo.transform.position) < 3)) 
         {
-            bondRequested = true;
+            if (lightBond != null && Vector3.Distance(pointOne.transform.position, pointTwo.transform.position) <= radius)
+            {
+                lightBond.DisplayText();
+            }
+
+            if (Input.GetKeyDown("q"))
+            {
+                bondRequested = true;
+            }
         }
 
-        if (Vector3.Distance(pointOne.transform.position, pointTwo.transform.position) <= radius)
+        else
         {
-            if (bondRequested)
+            if (lightBond != null)
             {
-                lineRenderer.SetPosition(0, pointOne.transform.position);
-                lineRenderer.SetPosition(1, pointTwo.transform.position);
-
-                isBonded = true;
+                lightBond.HideText();
             }
+        }
+
+        if (Vector3.Distance(pointOne.transform.position, pointTwo.transform.position) <= radius && bondRequested)
+        {
+            lineRenderer.SetPosition(0, pointOne.transform.position);
+            lineRenderer.SetPosition(1, pointTwo.transform.position);
+
+            isBonded = true;
         }
         else
         {
