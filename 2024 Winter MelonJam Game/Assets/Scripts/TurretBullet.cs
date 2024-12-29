@@ -6,6 +6,9 @@ public class TurretBullet : MonoBehaviour
     {
         Destroy(gameObject);
 
-        Debug.Log(collision);
+        if (collision.gameObject.tag == "Player")
+        {
+            collision.gameObject.GetComponent<Health>().Damage(50);
+        }
     }
 }

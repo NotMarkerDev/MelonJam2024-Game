@@ -13,8 +13,8 @@ public class GameManager : MonoBehaviour
     public GameObject settingsMenu;
     public GameObject pauseMenu;
     public GameObject mainMenu;
-    public bool isGameActive = true;
     public GameObject titleScreen;
+    public GameObject deathMenu;
 
     void Awake()
     {
@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        isGameActive = false;
+        deathMenu.SetActive(true);
     }
 
     public void Restart()
@@ -34,7 +34,6 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        isGameActive = true;
         SceneManager.LoadScene("Game");
         StartCoroutine(AssignCamera());
     }

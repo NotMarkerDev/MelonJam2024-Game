@@ -178,8 +178,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Q to bond/unbond
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
-  m_sharedMaterial: {fileID: 2147374, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -657,6 +657,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text: {fileID: 1110480195}
+  tutorial: {fileID: 0}
   lightBlocks:
     serializedVersion: 2
     m_Bits: 128
@@ -954,8 +955,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Press F to fire light beams
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
-  m_sharedMaterial: {fileID: 2147374, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1635,8 +1636,8 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
-  m_sharedMaterial: {fileID: 2147374, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1778,7 +1779,7 @@ PrefabInstance:
       objectReference: {fileID: -5523277661179574252, guid: da1da9291b605b84983298906cb30251, type: 3}
     - target: {fileID: 919132149155446097, guid: da1da9291b605b84983298906cb30251, type: 3}
       propertyPath: m_Name
-      value: Lizard_MelonJam2024
+      value: Jeff
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1790,6 +1791,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: da1da9291b605b84983298906cb30251, type: 3}
       insertIndex: -1
       addedObject: {fileID: 801241048}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: da1da9291b605b84983298906cb30251, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 801241049}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: da1da9291b605b84983298906cb30251, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 801241050}
   m_SourcePrefab: {fileID: 100100000, guid: da1da9291b605b84983298906cb30251, type: 3}
 --- !u!1 &801241040 stripped
 GameObject:
@@ -1844,6 +1851,45 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.6642809, y: 0.51409626, z: 1.8098745}
   m_Center: {x: 0.009630585, y: 0.030980146, z: -0.19907199}
+--- !u!95 &801241049
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 801241040}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4f79493fa66cdf34f94fa22c564b672a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &801241050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 801241040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 951a4ed582b8980478ccdb68c133bbe8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 1179806670}
+  playerPos: {fileID: 2074859806}
+  playerHealth: {fileID: 2074859812}
+  torch: {fileID: 1207260183}
+  shouldPathfind: 0
 --- !u!1 &809059143
 GameObject:
   m_ObjectHideFlags: 0
@@ -2354,8 +2400,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Right click to light torch
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
-  m_sharedMaterial: {fileID: 2147374, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2441,7 +2487,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1179806671}
   - component: {fileID: 1179806670}
-  - component: {fileID: 1179806669}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -2449,20 +2494,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1179806669
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1179806668}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 951a4ed582b8980478ccdb68c133bbe8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agent: {fileID: 1179806670}
-  playerPos: {fileID: 2074859806}
 --- !u!195 &1179806670
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2670,6 +2701,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lineRendPrefab: {fileID: 3688783296848756858, guid: 525407fd9cdfe0a4bb4a3f2c5b293d51, type: 3}
   text: {fileID: 193447767}
+  textPrefab: {fileID: 0}
   radius: 5
   playerPos: {fileID: 2074859806}
   lightPolarity:
@@ -3312,6 +3344,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text: {fileID: 1110480195}
+  tutorial: {fileID: 0}
   lightBlocks:
     serializedVersion: 2
     m_Bits: 128
@@ -3904,6 +3937,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text: {fileID: 1110480195}
+  tutorial: {fileID: 0}
   lightBlocks:
     serializedVersion: 2
     m_Bits: 128
@@ -3935,6 +3969,7 @@ GameObject:
   - component: {fileID: 2074859809}
   - component: {fileID: 2074859810}
   - component: {fileID: 2074859811}
+  - component: {fileID: 2074859812}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -4091,6 +4126,7 @@ MonoBehaviour:
   grabPoint: {fileID: 620219022}
   source: {fileID: 2074859811}
   clip: {fileID: 8300000, guid: 3caaca24e0f966246b531ee1556c5636, type: 3}
+  tutorialText: {fileID: 0}
 --- !u!114 &2074859810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4109,6 +4145,7 @@ MonoBehaviour:
   firePoint: {fileID: 537762999}
   ammoText: {fileID: 792763503}
   clip: {fileID: 8300000, guid: ff01158d19b09d2469fb1db6100cedd3, type: 3}
+  newText: {fileID: 0}
 --- !u!82 &2074859811
 AudioSource:
   m_ObjectHideFlags: 0
@@ -4206,6 +4243,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2074859812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2074859801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fd19172fca64a741ad053d0fd992450, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
 --- !u!1 &776483129338819065
 GameObject:
   m_ObjectHideFlags: 0
