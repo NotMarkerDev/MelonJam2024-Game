@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
@@ -10,16 +9,17 @@ public class GameManager : MonoBehaviour
     public Slider sound;
     public Slider mouseXSens;
     public Slider mouseYSens;
-    private Cam camera;
+    private Cam playerCamera;
     public GameObject settingsMenu;
     public GameObject pauseMenu;
     public GameObject mainMenu;
     public bool isGameActive = true;
     public GameObject titleScreen;
-    // Start is called before the first frame update
+
     void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
+        LoadSettings();
     }
 
     public void GameOver()
@@ -35,23 +35,25 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         isGameActive = true;
-        //titleScreen.gameObject.SetActive(false);
         SceneManager.LoadScene("Main");
-        camera = GameObject.Find("Player").GetComponent<Cam>();
+        StartCoroutine(AssignCamera());
     }
 
     public void MainMenu()
     {
         SceneManager.LoadScene("Menu");
-        camera.xSens *= mouseXSens.value;
-        camera.ySens *= mouseYSens.value;
+        SaveSettings();
+        UpdateCameraSensitivities();
     }
 
     public void Resume()
     {
         Time.timeScale = 1.0f;
-        camera.xSens *= mouseXSens.value;
-        camera.ySens *= mouseYSens.value;
+        if (pauseMenu != null)
+        {
+            pauseMenu.SetActive(false);
+        }
+        UpdateCameraSensitivities();
     }
 
     public void Quit()
@@ -63,25 +65,76 @@ public class GameManager : MonoBehaviour
     {
         mainMenu.SetActive(false);
         settingsMenu.SetActive(true);
-        camera.xSens *= mouseXSens.value;
-        camera.ySens *= mouseYSens.value;
+        UpdateCameraSensitivities();
+        LoadSettings();
     }
 
-    // Update is called once per frame
+    private void UpdateCameraSensitivities()
+    {
+        if (playerCamera != null)
+        {
+            playerCamera.xSens = mouseXSens.value * 100f;
+            playerCamera.ySens = mouseYSens.value * 100f;
+        }
+        else
+        {
+            Debug.LogWarning("Camera not found!");
+        }
+    }
+
+    private IEnumerator AssignCamera()
+    {
+        yield return new WaitForSeconds(0.1f);
+        playerCamera = GameObject.Find("Player")?.GetComponent<Cam>();
+        UpdateCameraSensitivities();
+    }
+
     void Update()
     {
-        if(Input.GetKeyDown("escape") && !settingsMenu.activeSelf && SceneManager.GetActiveScene().name == "Main" && !pauseMenu.activeSelf)
+        if (Input.GetKeyDown(KeyCode.Escape) && !settingsMenu.activeSelf && SceneManager.GetActiveScene().name == "Main" && !pauseMenu.activeSelf)
         {
             Time.timeScale = 0f;
-            //display pause UI
+            if (pauseMenu != null)
+            {
+                pauseMenu.SetActive(true);
+            }
         }
-        else if(Input.GetKeyDown("escape") && settingsMenu.activeSelf)
+        else if (Input.GetKeyDown(KeyCode.Escape) && settingsMenu.activeSelf)
         {
             settingsMenu.SetActive(false);
+            SaveSettings();
         }
-        else if(Input.GetKeyDown("escape") && SceneManager.GetActiveScene().name == "Main")
+        else if (Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().name == "Main")
         {
-            pauseMenu.SetActive(true);
+            if (pauseMenu != null)
+            {
+                pauseMenu.SetActive(true);
+                Time.timeScale = 0f;
+            }
+        }
+    }
+
+    public void SaveSettings()
+    {
+        PlayerPrefs.SetFloat("Sound", sound.value);
+        PlayerPrefs.SetFloat("MouseXSens", mouseXSens.value);
+        PlayerPrefs.SetFloat("MouseYSens", mouseYSens.value);
+        PlayerPrefs.Save();
+    }
+
+    private void LoadSettings()
+    {
+        if (PlayerPrefs.HasKey("Sound"))
+        {
+            sound.value = PlayerPrefs.GetFloat("Sound");
+        }
+        if (PlayerPrefs.HasKey("MouseXSens"))
+        {
+            mouseXSens.value = PlayerPrefs.GetFloat("MouseXSens");
+        }
+        if (PlayerPrefs.HasKey("MouseYSens"))
+        {
+            mouseYSens.value = PlayerPrefs.GetFloat("MouseYSens");
         }
     }
 }
