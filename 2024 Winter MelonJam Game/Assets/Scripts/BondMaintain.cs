@@ -32,7 +32,7 @@ public class BondMaintain : MonoBehaviour
         {
             bondRequested = false;
         }
-        else if ((Vector3.Distance(playerPos.position, pointOne.transform.position) < 3 || Vector3.Distance(playerPos.position, pointTwo.transform.position) < 3)) 
+        else if (Vector3.Distance(playerPos.position, pointOne.transform.position) < 3 || Vector3.Distance(playerPos.position, pointTwo.transform.position) < 3)
         {
             if (lightBond != null && Vector3.Distance(pointOne.transform.position, pointTwo.transform.position) <= radius)
             {

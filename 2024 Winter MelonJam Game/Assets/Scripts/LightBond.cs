@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LightBond : MonoBehaviour
@@ -16,7 +14,6 @@ public class LightBond : MonoBehaviour
 
     private GameObject[] lights;
 
-    // Start is called before the first frame update
     void Start()
     {
         text.SetActive(false);
@@ -38,17 +35,6 @@ public class LightBond : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
-
     private void DrawBond(GameObject go1, GameObject go2)
     {
         lineRenderer = Instantiate(lineRendPrefab, lineRendPrefab.transform.position, lineRendPrefab.transform.rotation).GetComponent<LineRenderer>();
@@ -56,8 +42,6 @@ public class LightBond : MonoBehaviour
         lineRenderer.gameObject.GetComponent<BondMaintain>().pointTwo = go2;
         lineRenderer.gameObject.GetComponent<BondMaintain>().radius = radius;
         lineRenderer.gameObject.GetComponent<BondMaintain>().playerPos = playerPos;
-        //lineRenderer.SetPosition(0, transform.position);
-        //lineRenderer.SetPosition(1, collider.GetComponent<Transform>().position);
 
         BondMaintain bondMaintain = lineRenderer.GetComponent<BondMaintain>();
 
