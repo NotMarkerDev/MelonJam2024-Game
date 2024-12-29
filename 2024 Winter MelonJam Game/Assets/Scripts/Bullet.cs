@@ -10,6 +10,13 @@ public class Bullet : MonoBehaviour
     [SerializeField] private int maxBounces = 3;
 
     private int bounceCount = 0;
+    private Rigidbody rb;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+        rb.useGravity = false;
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -17,15 +24,8 @@ public class Bullet : MonoBehaviour
         {
             if (bounceCount < maxBounces)
             {
-                // Reflect the bullet's direction
-                Vector3 incomingDirection = GetComponent<Rigidbody>().linearVelocity.normalized;
-                Vector3 normal = collision.contacts[0].normal;
-                Vector3 reflectedDirection = Vector3.Reflect(incomingDirection, normal);
-
-                // Update bullet's velocity
-                Rigidbody rb = GetComponent<Rigidbody>();
-                rb.linearVelocity = reflectedDirection * rb.linearVelocity.magnitude;
-
+                Transform mirrorTransform = collision.transform;
+                rb.linearVelocity = mirrorTransform.forward * rb.linearVelocity.magnitude;
                 bounceCount++;
                 return;
             }
