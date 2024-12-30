@@ -8,6 +8,7 @@ public class LightPolarity : MonoBehaviour
     [SerializeField] GameObject tutorial;
 
     [SerializeField] LayerMask lightBlocks;
+    [SerializeField] LayerMask player;
     [SerializeField] float radius = 5f;
     [SerializeField] float polarity;
 
@@ -25,11 +26,17 @@ public class LightPolarity : MonoBehaviour
     private bool lightBlockInRange;
     private float lastRechargeTime;
 
+    private bool playerInRange;
+
     private bool torchLit = false;
 
     private bool isTextVisible = false;
 
     private bool lightBonded = false;
+
+    private bool isBonded;
+
+    private bool hasBonded = false;
 
     void Start()
     {
@@ -39,13 +46,21 @@ public class LightPolarity : MonoBehaviour
 
     void Update()
     {
-        if (polarity >= 3 && lightBlockInRange)
+        if (polarity >= 3)
         {
+            if (Input.GetKeyDown(KeyCode.Q) && playerInRange)
+            {
+                isBonded = !isBonded;
+                hasBonded = isBonded;
+            }
+
+            Debug.Log("light poalrity is bonded == " + isBonded);
+
             // Debug.Log("Inside light polarity isBonded == " + bondMaintain.isBonded);
             // Debug.Log("Inside light polarity point 1 is " + bondMaintain.pointOne.transform.position);
             // Debug.Log("Inside light polarity point 2 is " + bondMaintain.pointTwo.transform.position);
 
-            if (lightBonded)
+            if (isBonded && lightBlockInRange)
             {
                 Debug.Log("Conditions met for lighting the torch.");
                 if (Time.time >= lastRechargeTime + rechargeCooldown)
@@ -71,8 +86,15 @@ public class LightPolarity : MonoBehaviour
                             tutorial.GetComponent<TextMeshPro>().text = "You can also press F to fire a harmless light beam, which can bounce off mirrors.";
                             torchLit = true;
                         }
-
                     }
+                }
+            }
+            else
+            {
+                if (isTextVisible)
+                {
+                    text.SetActive(false);
+                    isTextVisible = false;
                 }
             }
         }
@@ -98,6 +120,7 @@ public class LightPolarity : MonoBehaviour
             // Check for light blocks
             Collider[] attractionColliders = Physics.OverlapSphere(transform.position, radius, lightBlocks);
             lightBlockInRange = Physics.Raycast(cam.transform.position, cam.transform.forward, rayLength, lightBlocks);
+            playerInRange = Physics.CheckSphere(transform.position, radius, player);
 
             polarity = attractionColliders.Length;
         }
