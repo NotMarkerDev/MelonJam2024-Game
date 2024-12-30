@@ -17,6 +17,8 @@ public class BondMaintain : MonoBehaviour
 
     public bool isBonded;
 
+    private bool isTextVisible = false;
+
     private void Awake()
     {
         lightBond = GameObject.Find("Bond Manager").GetComponent<LightBond>();
@@ -36,27 +38,34 @@ public class BondMaintain : MonoBehaviour
         if (Input.GetKeyDown("q") && (Vector3.Distance(playerPos.position, pointOne.transform.position) < 3 || Vector3.Distance(playerPos.position, pointTwo.transform.position) < 3) && bondRequested)
         {
             bondRequested = false;
+
+            isBonded = false;
         }
         else if (Vector3.Distance(playerPos.position, pointOne.transform.position) < 3 || Vector3.Distance(playerPos.position, pointTwo.transform.position) < 3)
         {
             if (lightBond != null && Vector3.Distance(pointOne.transform.position, pointTwo.transform.position) <= radius)
             {
-                lightBond.DisplayText();
+                if (!isTextVisible)
+                {
+                    lightBond.DisplayText();
+                    isTextVisible = true;
+                }
             }
-
             if (Input.GetKeyDown("q"))
             {
                 bondRequested = true;
 
+                isBonded = true;
+
                 source.PlayOneShot(clip);
             }
         }
-
         else
         {
-            if (lightBond != null)
+            if (isTextVisible)
             {
                 lightBond.HideText();
+                isTextVisible = false;
             }
         }
 
@@ -65,16 +74,22 @@ public class BondMaintain : MonoBehaviour
             lineRenderer.SetPosition(0, pointOne.transform.position);
             lineRenderer.SetPosition(1, pointTwo.transform.position);
 
-            isBonded = true;
+            // isBonded = true;
 
             lightBond.CheckBondedBlocks();
+
+            Debug.Log("IsBonded == " + isBonded);
         }
         else
         {
             lineRenderer.SetPosition(0, Vector3.down * 100);
             lineRenderer.SetPosition(1, Vector3.down * 100);
 
-            isBonded = false;
+            // isBonded = false;
+            Debug.Log("Point one position =" + pointOne.transform.position);
+            Debug.Log("Point two position =" + pointTwo.transform.position);
+            Debug.Log("Point's distance = " + Vector3.Distance(pointOne.transform.position, pointTwo.transform.position));
+            Debug.Log("IsBonded set to " + isBonded);
         }
     }
 }

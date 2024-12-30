@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 
@@ -7,7 +8,6 @@ public class LightPolarity : MonoBehaviour
     [SerializeField] GameObject tutorial;
 
     [SerializeField] LayerMask lightBlocks;
-    [SerializeField] LayerMask player;
     [SerializeField] float radius = 5f;
     [SerializeField] float polarity;
 
@@ -16,6 +16,7 @@ public class LightPolarity : MonoBehaviour
     [SerializeField] Transform cam;
     [SerializeField] private float rayLength = 5f;
 
+    [Header("Light Beams")]
     [SerializeField] private FireLightBeams fireLightBeams;
     [SerializeField] private int ammoRechargeAmount = 1;
     [SerializeField] private float rechargeCooldown = 0.25f;
@@ -26,6 +27,10 @@ public class LightPolarity : MonoBehaviour
 
     private bool torchLit = false;
 
+    private bool isTextVisible = false;
+
+    private bool lightBonded = false;
+
     void Start()
     {
         text.SetActive(false);
@@ -34,34 +39,50 @@ public class LightPolarity : MonoBehaviour
 
     void Update()
     {
-        if (polarity >= 3 && lightBlockInRange && bondMaintain != null && bondMaintain.isBonded)
+        if (polarity >= 3 && lightBlockInRange)
         {
-            if (Time.time >= lastRechargeTime + rechargeCooldown)
-            {
-                fireLightBeams.IncreaseAmmo(ammoRechargeAmount);
-                lastRechargeTime = Time.time;
-            }
+            // Debug.Log("Inside light polarity isBonded == " + bondMaintain.isBonded);
+            // Debug.Log("Inside light polarity point 1 is " + bondMaintain.pointOne.transform.position);
+            // Debug.Log("Inside light polarity point 2 is " + bondMaintain.pointTwo.transform.position);
 
-            if (!torch.hasLit)
+            if (lightBonded)
             {
-                text.SetActive(true);
-
-                if (Input.GetMouseButtonDown(1))
+                Debug.Log("Conditions met for lighting the torch.");
+                if (Time.time >= lastRechargeTime + rechargeCooldown)
                 {
-                    StartCoroutine(torch.LitTorch());
+                    fireLightBeams.IncreaseAmmo(ammoRechargeAmount);
+                    lastRechargeTime = Time.time;
+                }
 
-                    if (!torchLit)
+                if (!torch.hasLit)
+                {
+                    if (!isTextVisible)
                     {
-                        tutorial.GetComponent<TextMeshPro>().text = "You can also press F to fire a harmless light beam, which can bounce off mirrors.";
-                        torchLit = true;
+                        text.SetActive(true);
+                        isTextVisible = true;
                     }
 
+                    if (Input.GetMouseButtonDown(1))
+                    {
+                        StartCoroutine(torch.LitTorch());
+
+                        if (!torchLit)
+                        {
+                            tutorial.GetComponent<TextMeshPro>().text = "You can also press F to fire a harmless light beam, which can bounce off mirrors.";
+                            torchLit = true;
+                        }
+
+                    }
                 }
             }
         }
         else
         {
-            text.SetActive(false);
+            if (isTextVisible)
+            {
+                text.SetActive(false);
+                isTextVisible = false;
+            }
         }
 
         if (bondMaintain == null)
@@ -72,7 +93,7 @@ public class LightPolarity : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (Physics.CheckSphere(transform.position, radius, player))
+        if (Physics.CheckSphere(transform.position, radius))
         {
             // Check for light blocks
             Collider[] attractionColliders = Physics.OverlapSphere(transform.position, radius, lightBlocks);
@@ -89,5 +110,21 @@ public class LightPolarity : MonoBehaviour
     public void SetBondMaintain(BondMaintain bond)
     {
         bondMaintain = bond;
+    }
+
+    public void SetBonded(bool isBonded)
+    {
+        lightBonded = isBonded;
+    }
+
+    /*public bool GetBonded()
+    {
+        return lightBonded;
+    }*/
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, radius);
     }
 }
