@@ -15,7 +15,7 @@ public class IntroduceJeff : MonoBehaviour
     {
         if (cue.isActivated) 
         {
-            transform.position = transform.position - new Vector3(transform.position.x, -1.17f, transform.position.z);
+            transform.position = new Vector3(transform.position.x, -1.17f, transform.position.z);
             jeff.SetActive(true);
         }
     }
