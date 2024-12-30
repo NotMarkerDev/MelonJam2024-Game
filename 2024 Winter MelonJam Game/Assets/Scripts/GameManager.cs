@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     public GameObject mainMenu;
     public GameObject titleScreen;
     public GameObject deathMenu;
+    public GameObject victoryPanel;
+    private Cue cue;
 
     private bool isDead = false;
 
@@ -55,6 +57,8 @@ public class GameManager : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        cue = GameObject.Find("Victory Cue").GetComponent<Cue>();
     }
 
     public void MainMenu()
@@ -68,6 +72,7 @@ public class GameManager : MonoBehaviour
         mainMenu.SetActive(true);
         pauseMenu.SetActive(false);
         deathMenu.SetActive(false);
+        victoryPanel.SetActive(false);
     }
 
     public void Resume()
@@ -141,6 +146,11 @@ public class GameManager : MonoBehaviour
             {
                 Resume();
             }
+        }
+
+        if(cue.isActivated)
+        {
+            victoryPanel.SetActive(true);
         }
     }
 

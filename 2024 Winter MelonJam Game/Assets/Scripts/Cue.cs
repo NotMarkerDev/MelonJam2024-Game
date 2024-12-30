@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class PolarityButton : MonoBehaviour
+public class Cue : MonoBehaviour
 {
-    public Transform door;
+    public bool isActivated = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -17,6 +17,9 @@ public class PolarityButton : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        door.position = Vector3.up * 100;
+        if(collision.gameObject.tag == "Player")
+        {
+            isActivated = true;
+        }
     }
 }
