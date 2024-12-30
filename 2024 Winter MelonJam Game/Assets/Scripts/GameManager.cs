@@ -30,11 +30,19 @@ public class GameManager : MonoBehaviour
     public void Restart()
     {
         SceneManager.LoadScene("Game");
+        mainMenu.SetActive(false);
+        settingsMenu.SetActive(false);
+        pauseMenu.SetActive(false);
+        titleScreen.SetActive(false);
     }
 
     public void StartGame()
     {
         SceneManager.LoadScene("Game");
+        mainMenu.SetActive(false);
+        settingsMenu.SetActive(false);
+        pauseMenu.SetActive(false);
+        titleScreen.SetActive(false);
         StartCoroutine(AssignCamera());
     }
 
@@ -68,6 +76,12 @@ public class GameManager : MonoBehaviour
         LoadSettings();
     }
 
+    public void Back()
+    {
+        settingsMenu.SetActive(false);
+        mainMenu.SetActive(true);
+    }
+
     private void UpdateCameraSensitivities()
     {
         if (playerCamera != null)
@@ -90,7 +104,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && !settingsMenu.activeSelf && SceneManager.GetActiveScene().name == "Main" && !pauseMenu.activeSelf)
+        if (Input.GetKeyDown(KeyCode.Escape) && !settingsMenu.activeSelf && SceneManager.GetActiveScene().name == "Game" && !pauseMenu.activeSelf)
         {
             Time.timeScale = 0f;
             if (pauseMenu != null)
@@ -101,9 +115,10 @@ public class GameManager : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.Escape) && settingsMenu.activeSelf)
         {
             settingsMenu.SetActive(false);
+            mainMenu.SetActive(true);
             SaveSettings();
         }
-        else if (Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().name == "Main")
+        else if (Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().name == "Game")
         {
             if (pauseMenu != null)
             {
