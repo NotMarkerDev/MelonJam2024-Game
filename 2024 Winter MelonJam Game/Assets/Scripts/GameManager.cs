@@ -57,8 +57,6 @@ public class GameManager : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
-        cue = GameObject.Find("Victory Cue").GetComponent<Cue>();
     }
 
     public void MainMenu()
@@ -124,6 +122,8 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         playerCamera = GameObject.Find("Player")?.GetComponent<Cam>();
         UpdateCameraSensitivities();
+
+        cue = GameObject.Find("Victory Cue").GetComponent<Cue>();
     }
 
     void Update()
@@ -148,9 +148,12 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if(cue.isActivated)
+        if (cue != null)
         {
-            victoryPanel.SetActive(true);
+            if (cue.isActivated)
+            {
+                victoryPanel.SetActive(true);
+            }
         }
     }
 
