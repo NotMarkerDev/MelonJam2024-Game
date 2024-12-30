@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -16,6 +15,8 @@ public class GameManager : MonoBehaviour
     public GameObject titleScreen;
     public GameObject deathMenu;
 
+    private bool isDead = false;
+
     void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
@@ -24,43 +25,63 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        isDead = true;
+        if (playerCamera != null)
+        {
+            playerCamera.enabled = false;
+        }
         deathMenu.SetActive(true);
+        Time.timeScale = 0f;
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     public void Restart()
     {
+        isDead = false;
+        Time.timeScale = 1.0f;
         SceneManager.LoadScene("Game");
-        mainMenu.SetActive(false);
-        settingsMenu.SetActive(false);
-        pauseMenu.SetActive(false);
-        titleScreen.SetActive(false);
+        DisableAllMenus();
     }
 
     public void StartGame()
     {
+        isDead = false;
+        Time.timeScale = 1.0f;
         SceneManager.LoadScene("Game");
-        mainMenu.SetActive(false);
-        settingsMenu.SetActive(false);
-        pauseMenu.SetActive(false);
-        titleScreen.SetActive(false);
+        DisableAllMenus();
         StartCoroutine(AssignCamera());
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     public void MainMenu()
     {
+        isDead = false;
+
         SceneManager.LoadScene("Menu");
-        SaveSettings();
+        LoadSettings();
         UpdateCameraSensitivities();
+
+        mainMenu.SetActive(true);
+        pauseMenu.SetActive(false);
+        deathMenu.SetActive(false);
     }
 
     public void Resume()
     {
         Time.timeScale = 1.0f;
-        if (pauseMenu != null)
+        pauseMenu.SetActive(false);
+        if (playerCamera != null)
         {
-            pauseMenu.SetActive(false);
+            playerCamera.enabled = true;
         }
         UpdateCameraSensitivities();
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     public void Quit()
@@ -80,6 +101,8 @@ public class GameManager : MonoBehaviour
     {
         settingsMenu.SetActive(false);
         mainMenu.SetActive(true);
+
+        SaveSettings();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
     }
 
     private void UpdateCameraSensitivities()
@@ -88,10 +111,6 @@ public class GameManager : MonoBehaviour
         {
             playerCamera.xSens = mouseXSens.value * 100f;
             playerCamera.ySens = mouseYSens.value * 100f;
-        }
-        else
-        {
-            Debug.LogWarning("Camera not found!");
         }
     }
 
@@ -104,26 +123,23 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && !settingsMenu.activeSelf && SceneManager.GetActiveScene().name == "Game" && !pauseMenu.activeSelf)
+        if (!isDead && Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().name == "Game")
         {
-            Time.timeScale = 0f;
-            if (pauseMenu != null)
+            if (!pauseMenu.activeSelf)
             {
-                pauseMenu.SetActive(true);
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.Escape) && settingsMenu.activeSelf)
-        {
-            settingsMenu.SetActive(false);
-            mainMenu.SetActive(true);
-            SaveSettings();
-        }
-        else if (Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().name == "Game")
-        {
-            if (pauseMenu != null)
-            {
-                pauseMenu.SetActive(true);
                 Time.timeScale = 0f;
+                pauseMenu.SetActive(true);
+                if (playerCamera != null)
+                {
+                    playerCamera.enabled = false;
+                }
+
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                Resume();
             }
         }
     }
@@ -134,7 +150,6 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.SetFloat("MouseXSens", mouseXSens.value);
         PlayerPrefs.SetFloat("MouseYSens", mouseYSens.value);
         PlayerPrefs.Save();
-
         AudioListener.volume = sound.value / 5;
     }
 
@@ -153,5 +168,14 @@ public class GameManager : MonoBehaviour
         {
             mouseYSens.value = PlayerPrefs.GetFloat("MouseYSens");
         }
+    }
+
+    private void DisableAllMenus()
+    {
+        mainMenu.SetActive(false);
+        settingsMenu.SetActive(false);
+        pauseMenu.SetActive(false);
+        titleScreen.SetActive(false);
+        deathMenu.SetActive(false);
     }
 }

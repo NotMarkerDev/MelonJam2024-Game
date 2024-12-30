@@ -8,7 +8,7 @@ public class TurretBullet : MonoBehaviour
 
         if (collision.gameObject.tag == "Player")
         {
-            collision.gameObject.GetComponent<Health>().Damage(50);
+            collision.gameObject.GetComponent<Health>().Damage(25);
         }
     }
 }

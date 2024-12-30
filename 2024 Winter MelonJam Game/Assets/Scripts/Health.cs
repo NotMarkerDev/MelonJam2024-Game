@@ -23,5 +23,7 @@ public class Health : MonoBehaviour
     public void Damage(float damage)
     {
         playerHealth -= damage;
+
+        Debug.Log("Took " + damage + " damage");
     }
 }
